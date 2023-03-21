@@ -21,7 +21,6 @@ useEffect(() => {
             .then((data) => {
               if (data.users) { 
                 var obj =Object.values(data.users);
-                console.log(obj)
                 setRows(obj);
               } else {
               }
