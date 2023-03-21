@@ -19,3 +19,20 @@
     background-color: rgb(77, 85, 200);
     color: white;
 }
+
+.flexBox {
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    width: 500px;
+    padding: 15px 20px;
+    
+}
+
+.formField {
+    width: 100%;
+    margin: 15px !important;
+}
