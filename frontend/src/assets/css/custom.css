@@ -1,0 +1,21 @@
+.linkTag {
+    background-color: green;
+    color: white;
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.tableStyles {
+    margin: 15px;
+}
+
+.tableHeader {
+    background-color: rgb(77, 85, 200);
+    color: white;
+}
