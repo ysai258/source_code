@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import '../assets/css/custom.css'
-import { Button, Modal, Input } from 'antd';
+import { Button, Modal, Input, Alert } from 'antd';
 
 const Inventory = () => {
 
@@ -13,6 +13,7 @@ const Inventory = () => {
  const [editName, setEditName] = useState('');
  const [editQuantity, setEditQuantity] = useState('');
  const [rows, setRows] = useState([]);
+ const [warning, setWarning] = useState('');
  const showModal = () => {
     setTitle('Add Item');
     setOkText('Add');
@@ -24,16 +25,25 @@ const Inventory = () => {
     setTitle('');
     setOkText('');
     setIsModalOpen(false);
+    setWarning('');
  }
 
  const handleAdd = () => {
-    console.log(addName, addQuantity);
-    setIsModalOpen(false);
+    if (addName.trim().length && Number.isInteger(addQuantity)) {
+        setWarning('');
+        setIsModalOpen(false);
+    } else {
+        setWarning('All Fields Are Mandatory');
+    }
  }
 
  const handleUpdate = () => {
-    console.log(editName, editQuantity);
-    setIsModalOpen(false);
+    if (editName.trim().length  && Number.isInteger(editQuantity)) {
+        setWarning('');
+        setIsModalOpen(false);
+    } else {
+        setWarning('Name & Quantity are mandatory fields');
+    }
  }
 
  const showEditModal = (data) => {
@@ -71,13 +81,15 @@ const Inventory = () => {
                 Add Item
             </Button>
             {!isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleAdd} onCancel={handleCancel} okText={okText}>
+                {warning && <Alert message={warning} type="warning" showIcon />}
                 <Input className='modalStyles' placeholder="Name" onChange={(e) => setAddName(e.target.value)}/>
-                <Input className='modalStyles' placeholder="Quantity"  type="number" onChange={(e) => setAddQuantity(e.target.value)}/>
+                <Input className='modalStyles' min='0' placeholder="Quantity"  type="number" onChange={(e) => setAddQuantity(parseInt(e.target.value))}/>
                 <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg"/>
             </Modal>}
             {isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleUpdate} onCancel={handleCancel} okText={okText}>
+                {warning && <Alert message={warning} type="warning" showIcon />}
                 <Input className='modalStyles' placeholder="Name"  onChange={(e) => setEditName(e.target.value)} value={editName}/>
-                <Input className='modalStyles' placeholder="Quantity" type="number" onChange={(e) => setEditQuantity(e.target.value)} value={editQuantity}/>
+                <Input className='modalStyles' min='0' placeholder="Quantity" type="number" onChange={(e) => setEditQuantity(parseInt(e.target.value))} value={editQuantity}/>
             </Modal>}
             </div>
         </div>
