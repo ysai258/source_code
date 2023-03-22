@@ -7,18 +7,18 @@ const Inventory = () => {
  const [isModalOpen, setIsModalOpen] = useState(false);
  const [title, setTitle] = useState('');
  const [okText, setOkText] = useState('');
- const [showImageField, setShowImageField] = useState(false);
- const [editFunction, setEditFunction] = useState();
+ const [isEditFunction, setIsEditFunction] = useState();
 
  const showModal = () => {
     setTitle('Add Item');
     setOkText('Add');
-    setShowImageField(true);
+    setIsEditFunction(false);
     setIsModalOpen(true);
  }
 
  const handleCancel = () => {
-    defaultStateVariables();
+    setTitle('');
+    setOkText('');
     setIsModalOpen(false);
  }
 
@@ -30,15 +30,10 @@ const Inventory = () => {
     setIsModalOpen(false);
  }
 
- const defaultStateVariables = () => {
-    setTitle('');
-    setOkText('');
- }
-
  const showEditModal = () => {
     setTitle('Edit Item');
     setOkText('Update');
-    setShowImageField(false);
+    setIsEditFunction(true);
     setIsModalOpen(true);
  }
 
@@ -53,11 +48,15 @@ const Inventory = () => {
             <Button type="primary" onClick={showModal}>
                 Add Item
             </Button>
-            <Modal title={title} open={isModalOpen} onOk={editFunction} onCancel={handleCancel} okText={okText}>
+            {!isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleAdd} onCancel={handleCancel} okText={okText}>
                 <Input className='modalStyles' placeholder="Name" />
                 <Input className='modalStyles' placeholder="Quantity"  type="number"/>
-                {showImageField && <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg"/>}
-            </Modal>
+                <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg"/>
+            </Modal>}
+            {isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleUpdate} onCancel={handleCancel} okText={okText}>
+                <Input className='modalStyles' placeholder="Name" />
+                <Input className='modalStyles' placeholder="Quantity"  type="number"/>
+            </Modal>}
             </div>
         </div>
 
@@ -65,7 +64,7 @@ const Inventory = () => {
 
         <div className='flexBox'>
             <div className='itemBox'>
-                <img src='/img/hera.jpg' style={{ width: "200px", height: '200px' }}></img>
+                <img src='/img/hera.jpg' alt="img" style={{ width: "200px", height: '200px' }}></img>
                 <div className='innerFlex'>
                     <p className='nameText'>Name</p>
                     <p className='quantityText'>Quantity</p>
