@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 import express from "express";
 import mongoose from "mongoose";
 import Cors from "cors";
@@ -13,16 +13,23 @@ app.use(express.json())
 app.use(Cors());
 // DB config
 
+//mongodb integration
+const url = `mongodb+srv://gallasathvika2001:${process.env.mongoPassword}@cluster0.row0apk.mongodb.net/${process.env.mongodbName}?retryWrites=true&w=majority`;
+
+mongoose.connect(url);
+
+const connection = mongoose.connection;
+
+connection.once('open', ()=>{
+    console.log('MongoDB connected');
+})
 
 //API Endpoint
 
 app.get('/', (req, res) => res.status(200).send(" Programmers!!!"));
 
 app.post('/api/calulate',(req, res) =>{
-    console.log(Number(req.body.fn))
-    var s = parseInt(req.body.fn) + parseInt(req.body.sn);
-    console.log(s);
-    // res.send('hello');
+    let s = parseInt(req.body.fn) + parseInt(req.body.sn);
     res.status(200).send(s.toString());
 })
 
