@@ -20,19 +20,64 @@
     color: white;
 }
 
-.flexBox {
+.stickyHeader {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
     margin: auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    flex-direction: column;
     height: auto;
-    width: 500px;
+    width: 40% !important;
     padding: 15px 20px;
-    
+    background-color: rgba(190, 81, 45, 0.984);
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.spanText {
+    font-weight: 600;
+    font-style: normal;
+    font-size: medium;
+    color: white;
 }
 
 .formField {
     width: 100%;
     margin: 15px !important;
+}
+
+.modalStyles {
+    padding: 10px;
+    margin: 10px 0px;
+}
+
+.itemBox {
+    margin: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    width: 500px;
+    height: auto;
+    padding: 10px 25px;
+    background-color: aliceblue;
+    border: 2px solid gray;
+    border-radius: 5px;
+}
+
+.innerFlex {
+    padding-left: 25px;
+    text-align: left;
+}
+
+.nameText {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.quantityText {
+    font-size: 15px;
+    font-weight: bold;
 }
