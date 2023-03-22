@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import '../assets/css/custom.css'
 import { Button, Modal, Input, Alert } from 'antd';
+import { INVENTORY_API } from '../constants/constants';
 
 const Inventory = () => {
 
@@ -10,10 +11,15 @@ const Inventory = () => {
  const [isEditFunction, setIsEditFunction] = useState();
  const [addName, setAddName] = useState('');
  const [addQuantity, setAddQuantity] = useState('');
+ const [addImgUrl, setAddImgUrl] = useState('dummyUrl');
+ const [editId, setEditId] = useState(''); 
  const [editName, setEditName] = useState('');
  const [editQuantity, setEditQuantity] = useState('');
  const [rows, setRows] = useState([]);
  const [warning, setWarning] = useState('');
+ const [offset, setOffset] = useState(0);
+ const [limit] = useState(3);
+ const [totalDataCount,setTotalDataCount] = useState(10);
  const showModal = () => {
     setTitle('Add Item');
     setOkText('Add');
@@ -28,25 +34,47 @@ const Inventory = () => {
     setWarning('');
  }
 
- const handleAdd = () => {
+
+ const handleAdd = async () => {
     if (addName.trim().length && Number.isInteger(addQuantity)) {
-        setWarning('');
-        setIsModalOpen(false);
+        const res = await fetch(`${INVENTORY_API}/addItem`,{
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "name":addName,"quantity":addQuantity,"img_s3path":addImgUrl}),
+          });
+        if(res.ok){
+            setAddName('');
+            setAddQuantity('');
+            setAddImgUrl('');
+            setWarning('');
+            setIsModalOpen(false);
+            fetchItems();
+        }
     } else {
         setWarning('All Fields Are Mandatory');
     }
  }
 
- const handleUpdate = () => {
+ const handleUpdate = async() => {
     if (editName.trim().length  && Number.isInteger(editQuantity)) {
-        setWarning('');
-        setIsModalOpen(false);
+        const res = await fetch(`${INVENTORY_API}/updateItem`,{
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "_id":editId,"name":editName,"quantity":editQuantity}),
+          });
+          if(res.ok){
+            setWarning('');
+            setIsModalOpen(false);
+            fetchItems();
+        }
+
     } else {
         setWarning('Name & Quantity are mandatory fields');
     }
  }
 
  const showEditModal = (data) => {
+    setEditId(data._id);
     setEditName(data.name);
     setEditQuantity(data.quantity);
     setTitle('Edit Item');
@@ -55,18 +83,22 @@ const Inventory = () => {
     setIsModalOpen(true);
  }
 
+ const fetchItems = async () => {
+    try {
+      const res = await fetch(
+        `${INVENTORY_API}/getItems?limit=${limit}&offset=${offset}`
+      );
+      const data = await res.json();
+      setRows(data.items);
+      setTotalDataCount(data.totalCount);
+    } catch (error) {
+      console.log("error while fetching users", error);
+    }
+  };
+
  useEffect(() => {
-    setRows([
-        {id :1, name : 'a', quantity : 100},
-        {id :2, name : 'b', quantity : 200},
-        {id :3, name : 'c', quantity : 300},
-        {id :4, name : 'd', quantity : 400},
-        {id :5, name : 'e', quantity : 500},
-        {id :6, name : 'f', quantity : 600},
-        {id :7, name : 'g', quantity : 700},
-        {id :8, name : 'h', quantity : 800}
-    ]);
- }, [])
+   fetchItems();
+ }, [offset]);
  
 
   return (
@@ -82,8 +114,8 @@ const Inventory = () => {
             </Button>
             {!isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleAdd} onCancel={handleCancel} okText={okText}>
                 {warning && <Alert message={warning} type="warning" showIcon />}
-                <Input className='modalStyles' placeholder="Name" onChange={(e) => setAddName(e.target.value)}/>
-                <Input className='modalStyles' min='0' placeholder="Quantity"  type="number" onChange={(e) => setAddQuantity(parseInt(e.target.value))}/>
+                <Input className='modalStyles' placeholder="Name" value={addName} onChange={(e) => setAddName(e.target.value)}/>
+                <Input className='modalStyles' min='0' placeholder="Quantity"  type="number" value={addQuantity} onChange={(e) => setAddQuantity(parseInt(e.target.value))}/>
                 <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg"/>
             </Modal>}
             {isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleUpdate} onCancel={handleCancel} okText={okText}>
@@ -98,9 +130,9 @@ const Inventory = () => {
 
         <div className='flexBox'>
             {rows.length>0 && rows.map(row => 
-            <>
+            <div key={row._id}>
                 <div className='itemBox'>
-                    <img src='/img/hera.jpg' alt="img" style={{ width: "200px", height: '200px' }}></img>
+                    <img src={row.img_s3path} alt={row.name} style={{ width: "200px", height: '200px' }}></img>
                     <div className='innerFlex'>
                         <p className='nameText'>{row.name}</p>
                         <p className='quantityText'>{row.quantity}</p>
@@ -111,7 +143,13 @@ const Inventory = () => {
                 </div>
 
                 <div style={{width: 'auto', height: '20px'}}></div>
-            </>)}  
+            </div>)}
+            {   
+                totalDataCount > offset + limit && (
+                <Button type="primary" onClick={() => setOffset(offset + limit)}>
+                    load more
+                </Button>
+            )}
         </div>
     </div>
   )
