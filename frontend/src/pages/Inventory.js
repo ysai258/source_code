@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import '../assets/css/custom.css'
 import { Button, Modal, Input } from 'antd';
 
@@ -8,6 +8,11 @@ const Inventory = () => {
  const [title, setTitle] = useState('');
  const [okText, setOkText] = useState('');
  const [isEditFunction, setIsEditFunction] = useState();
+ const [addName, setAddName] = useState('');
+ const [addQuantity, setAddQuantity] = useState('');
+ const [editName, setEditName] = useState('');
+ const [editQuantity, setEditQuantity] = useState('');
+
 
  const showModal = () => {
     setTitle('Add Item');
@@ -23,6 +28,7 @@ const Inventory = () => {
  }
 
  const handleAdd = () => {
+    console.log(addName, addQuantity);
     setIsModalOpen(false);
  }
 
@@ -30,7 +36,9 @@ const Inventory = () => {
     setIsModalOpen(false);
  }
 
- const showEditModal = () => {
+ const showEditModal = (data) => {
+    setEditName(data.name);
+    setEditQuantity(data.quantity);
     setTitle('Edit Item');
     setOkText('Update');
     setIsEditFunction(true);
@@ -49,13 +57,13 @@ const Inventory = () => {
                 Add Item
             </Button>
             {!isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleAdd} onCancel={handleCancel} okText={okText}>
-                <Input className='modalStyles' placeholder="Name" />
-                <Input className='modalStyles' placeholder="Quantity"  type="number"/>
+                <Input className='modalStyles' placeholder="Name" onChange={(e) => setAddName(e.target.value)}/>
+                <Input className='modalStyles' placeholder="Quantity"  type="number" onChange={(e) => setAddQuantity(e.target.value)}/>
                 <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg"/>
             </Modal>}
             {isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleUpdate} onCancel={handleCancel} okText={okText}>
-                <Input className='modalStyles' placeholder="Name" />
-                <Input className='modalStyles' placeholder="Quantity"  type="number"/>
+                <Input className='modalStyles' placeholder="Name"  onChange={(e) => setEditName(e.target.value)} value={editName}/>
+                <Input className='modalStyles' placeholder="Quantity" type="number" onChange={(e) => setEditQuantity(e.target.value)} value={editQuantity}/>
             </Modal>}
             </div>
         </div>
@@ -68,7 +76,7 @@ const Inventory = () => {
                 <div className='innerFlex'>
                     <p className='nameText'>Name</p>
                     <p className='quantityText'>Quantity</p>
-                    <Button type="primary" onClick={showEditModal}>
+                    <Button type="primary" onClick={() => showEditModal({id :1, name : 'srinu', quantity : 100})}>
                         Edit Item
                     </Button>
                 </div>
