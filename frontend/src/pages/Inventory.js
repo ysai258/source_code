@@ -12,8 +12,7 @@ const Inventory = () => {
  const [addQuantity, setAddQuantity] = useState('');
  const [editName, setEditName] = useState('');
  const [editQuantity, setEditQuantity] = useState('');
-
-
+ const [rows, setRows] = useState([]);
  const showModal = () => {
     setTitle('Add Item');
     setOkText('Add');
@@ -33,6 +32,7 @@ const Inventory = () => {
  }
 
  const handleUpdate = () => {
+    console.log(editName, editQuantity);
     setIsModalOpen(false);
  }
 
@@ -44,6 +44,20 @@ const Inventory = () => {
     setIsEditFunction(true);
     setIsModalOpen(true);
  }
+
+ useEffect(() => {
+    setRows([
+        {id :1, name : 'a', quantity : 100},
+        {id :2, name : 'b', quantity : 200},
+        {id :3, name : 'c', quantity : 300},
+        {id :4, name : 'd', quantity : 400},
+        {id :5, name : 'e', quantity : 500},
+        {id :6, name : 'f', quantity : 600},
+        {id :7, name : 'g', quantity : 700},
+        {id :8, name : 'h', quantity : 800}
+    ]);
+ }, [])
+ 
 
   return (
     <div>
@@ -71,18 +85,21 @@ const Inventory = () => {
         <div style={{width: 'auto', height: '20px'}}></div>
 
         <div className='flexBox'>
-            <div className='itemBox'>
-                <img src='/img/hera.jpg' alt="img" style={{ width: "200px", height: '200px' }}></img>
-                <div className='innerFlex'>
-                    <p className='nameText'>Name</p>
-                    <p className='quantityText'>Quantity</p>
-                    <Button type="primary" onClick={() => showEditModal({id :1, name : 'srinu', quantity : 100})}>
-                        Edit Item
-                    </Button>
+            {rows.length>0 && rows.map(row => 
+            <>
+                <div className='itemBox'>
+                    <img src='/img/hera.jpg' alt="img" style={{ width: "200px", height: '200px' }}></img>
+                    <div className='innerFlex'>
+                        <p className='nameText'>{row.name}</p>
+                        <p className='quantityText'>{row.quantity}</p>
+                        <Button type="primary" onClick={() => showEditModal(row)}>
+                            Edit Item
+                        </Button>
+                    </div>
                 </div>
-            </div>
 
-            <div style={{width: 'auto', height: '20px'}}></div>
+                <div style={{width: 'auto', height: '20px'}}></div>
+            </>)}  
         </div>
     </div>
   )
