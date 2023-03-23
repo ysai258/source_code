@@ -119,7 +119,7 @@ app.get("/getItems", async (req, res) => {
   try {
 
     // Find items in the collection with pagination options
-    const items = await InventoryModel.find();
+    const items = await InventoryModel.find().sort({"createdAt":-1});
 
     // Send a success response with the retrieved data and pagination info
     const totalCount = await InventoryModel.countDocuments();

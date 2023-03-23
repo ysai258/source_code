@@ -19,7 +19,7 @@ const Inventory = mongoose.Schema({
     type: String,
     required: true,
   },
-});
+},{timestamps:true});
 
 // Define model for the Inventory schema
 module.exports =InventoryModel = mongoose.model(
