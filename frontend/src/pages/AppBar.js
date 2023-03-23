@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -22,6 +22,8 @@ import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import { height } from '@mui/system';
+
+import '../assets/css/custom.css';
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -71,13 +73,19 @@ function ResponsiveAppBar(props) {
         <Toolbar disableGutters>
 
           
-          <img src = '/logo192.png' style={{height : "80px"}}></img>
+          <Link to='/'><img src = '/logo192.png' style={{height : "80px"}}></img></Link>
           
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
           </Box>
 
+   
+                <Link to="/third-party" className='linkTag'>Third Party API</Link>
+                <Link to="/inventory" className='linkTag'>Inventory</Link>
+             
+
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>
+              
               <div>
                 <img src = '/img/nav_pic.jpg' style={{width : "50px", height : '50px', borderRadius : '50%'}}></img>
                 <Button

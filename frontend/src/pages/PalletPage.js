@@ -168,8 +168,6 @@ const PalletPage = () => {
                         >
                           addition result(from ReactJS):  {resultF}
                         </Typography>
-                            <Link to="/third-party" className='linkTag'>Third Party API</Link>
-                            <Link to="/inventory" className='linkTag'>Inventory</Link>
                         </Grid>
 
                     </Grid>

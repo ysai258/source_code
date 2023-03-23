@@ -16,27 +16,28 @@ import Inventory from "./pages/Inventory";
 
 export default function App() {
   return (
-  <Routes>
-    <Route >
-        <Route path="/" element={
-          <div className="App">
-            <AppBar />
-            <PalletPage />
-          </div>
-        } />
-        <Route path="/third-party" element={
-          <div className="App">
-              <ThirdParty/>
-          </div>
-          } />
-          <Route path="/inventory" element={
+  <>
+    <AppBar />
+    <Routes>
+      <Route >
+          <Route path="/" element={
             <div className="App">
-                <Inventory/>
+              <PalletPage />
+            </div>
+          } />
+          <Route path="/third-party" element={
+            <div className="App">
+                <ThirdParty/>
             </div>
             } />
-    </Route>
-  </Routes>
-    
+            <Route path="/inventory" element={
+              <div className="App">
+                  <Inventory/>
+              </div>
+              } />
+      </Route>
+    </Routes>
+  </>
   );
 }
 //export default App;

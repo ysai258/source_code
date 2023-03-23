@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import '../assets/css/custom.css'
-import { Button, Modal, Input, Alert } from 'antd';
+import { Button, Modal, Input, Alert, Spin } from 'antd';
 import { INVENTORY_API } from '../constants/constants';
 
 const Inventory = () => {
@@ -18,6 +18,7 @@ const Inventory = () => {
  const [rows, setRows] = useState([]);
  const [warning, setWarning] = useState('');
  const [totalDataCount,setTotalDataCount] = useState(10);
+ const [isLoading, setIsLoading] = useState(false);
  const showModal = () => {
     setTitle('Add Item');
     setOkText('Add');
@@ -83,12 +84,14 @@ const Inventory = () => {
 
  const fetchItems = async () => {
     try {
+    setIsLoading(true);
       const res = await fetch(
         `${INVENTORY_API}/getItems`
       );
       const data = await res.json();
       setRows(data.items);
       setTotalDataCount(data.totalCount);
+      setIsLoading(false);
     } catch (error) {
       console.log("error while fetching users", error);
     }
@@ -127,7 +130,9 @@ const Inventory = () => {
         <div style={{width: 'auto', height: '20px'}}></div>
 
         <div className='flexBox'>
-            {rows.length>0 && rows.map(row => 
+            {isLoading  && <Spin size="large"/>}
+            {(!isLoading && rows.length === 0) && <Alert style={{width:'50%', margin:'auto'}} message='Inventory is empty, Please add items' type="info" showIcon />}
+            {(!isLoading && rows.length>0) && rows.map(row => 
             <div key={row._id}>
                 <div className='itemBox'>
                     <img src={row.img_s3path} alt={row.name} style={{ width: "200px", height: '200px' }}></img>

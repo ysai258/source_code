@@ -1,14 +1,13 @@
 .linkTag {
-    background-color: green;
-    color: white;
+    background-color: #61DAFB;
     font-size: 15px;
     border-radius: 5px;
-    padding: 5px 10px;
+    padding: 15px 20px;
     text-decoration: none;
     text-transform: capitalize;
     font-weight: bold;
     display: block;
-    margin-bottom: 15px;
+    margin: 0px 15px;
 }
 
 .tableStyles {
@@ -80,4 +79,9 @@
 .quantityText {
     font-size: 15px;
     font-weight: bold;
+}
+
+.headerRow {
+    text-align: left !important;
+    color: white !important;
 }

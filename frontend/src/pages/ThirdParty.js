@@ -7,15 +7,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import MuiAlert from '@mui/material/Alert';
+import { Spin } from 'antd';
+
 import '../assets/css/custom.css';
 
 const ThirdParty = () => {
 
 const [rows, setRows] = useState({});
 const [warning, setWarning] = useState('');
+const [isLoading, setIsLoading] = useState(false);
 
 useEffect(() => {
     async function fetchUsers() {
+      setIsLoading(true);
         fetch('https://jsonplaceholder.typicode.com/users')
             .then((response) => response.json())
             .then((data) => {
@@ -25,6 +29,7 @@ useEffect(() => {
               } else {
                 setWarning('Something Went Wrong!! please come back again');
               }
+              setIsLoading(false);
             });
         };
       fetchUsers();
@@ -38,16 +43,21 @@ useEffect(() => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
             <TableRow className='tableHeader'>
-                <TableCell>ID</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Username</TableCell>
-                <TableCell align="left">Email</TableCell>
-                <TableCell align="left">Phone</TableCell>
-                <TableCell align="left">Website</TableCell>
+                <TableCell className='headerRow'>ID</TableCell>
+                <TableCell className='headerRow'>Name</TableCell>
+                <TableCell className='headerRow'>Username</TableCell>
+                <TableCell className='headerRow'>Email</TableCell>
+                <TableCell className='headerRow'>Phone</TableCell>
+                <TableCell className='headerRow'>Website</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
-            {rows.length>0 && rows.map((row) => (
+            {isLoading  &&  
+              <TableCell colSpan={6}>
+                  <Spin  size="large"/>
+                </TableCell>
+            }
+            {(!isLoading && rows.length>0) && rows.map((row) => (
                 <TableRow
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
