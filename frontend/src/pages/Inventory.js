@@ -17,8 +17,6 @@ const Inventory = () => {
  const [editQuantity, setEditQuantity] = useState('');
  const [rows, setRows] = useState([]);
  const [warning, setWarning] = useState('');
- const [offset, setOffset] = useState(0);
- const [limit] = useState(3);
  const [totalDataCount,setTotalDataCount] = useState(10);
  const showModal = () => {
     setTitle('Add Item');
@@ -86,7 +84,7 @@ const Inventory = () => {
  const fetchItems = async () => {
     try {
       const res = await fetch(
-        `${INVENTORY_API}/getItems?limit=${limit}&offset=${offset}`
+        `${INVENTORY_API}/getItems`
       );
       const data = await res.json();
       setRows(data.items);
@@ -98,7 +96,7 @@ const Inventory = () => {
 
  useEffect(() => {
    fetchItems();
- }, [offset]);
+ }, []);
  
 
   return (
@@ -144,12 +142,6 @@ const Inventory = () => {
 
                 <div style={{width: 'auto', height: '20px'}}></div>
             </div>)}
-            {   
-                totalDataCount > offset + limit && (
-                <Button type="primary" onClick={() => setOffset(offset + limit)}>
-                    load more
-                </Button>
-            )}
         </div>
     </div>
   )

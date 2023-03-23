@@ -87,18 +87,13 @@ app.post("/updateItem", async (req, res) => {
 // GET request to get Inventory from database
 app.get("/getItems", async (req, res) => {
   try {
-    const { limit = 10, offset = 0 } = req.query;
 
     // Find items in the collection with pagination options
-    const items = await InventoryModel.find()
-      .skip(Number(offset))
-      .limit(Number(limit));
+    const items = await InventoryModel.find();
 
     // Send a success response with the retrieved data and pagination info
     const totalCount = await InventoryModel.countDocuments();
     const response = {
-      limit: Number(limit),
-      offset: Number(offset),
       totalCount,
       items,
     };
