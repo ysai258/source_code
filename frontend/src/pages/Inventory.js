@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import '../assets/css/custom.css'
 import { Button, Modal, Input, Alert, Spin, message } from 'antd';
 import { INVENTORY_API } from '../constants/constants';
+import { Upload } from 'antd';
+import { UploadOutlined} from '@ant-design/icons';
 
 const Inventory = () => {
 
@@ -9,7 +11,7 @@ const Inventory = () => {
  const [title, setTitle] = useState('');
  const [okText, setOkText] = useState('');
  const [isEditFunction, setIsEditFunction] = useState();
- const [selectedFile, setSelectedFile] = useState(null);
+ const [imageList, setImageList] = useState([]);
  const [addName, setAddName] = useState('');
  const [addQuantity, setAddQuantity] = useState('');
  const [editId, setEditId] = useState(''); 
@@ -21,6 +23,9 @@ const Inventory = () => {
  const [isLoading, setIsLoading] = useState(false);
  const [messageApi, contextHolder] = message.useMessage();
 
+ const [previewOpen, setPreviewOpen] = useState(false);
+ const [previewImage, setPreviewImage] = useState('');
+ const [previewTitle, setPreviewTitle] = useState('');
 const success = () => {
     messageApi.open({
         type: 'success',
@@ -68,9 +73,9 @@ const error = () => {
     return '';
 }
  const handleAdd = async () => {
-    if (addName.trim().length && Number.isInteger(addQuantity) && selectedFile!=null) {
+    if (addName.trim().length && Number.isInteger(addQuantity) && imageList.length>0) {
         setIsLoading(true);
-        const imgPath = await uploadImage(selectedFile);
+        const imgPath = await uploadImage(imageList[0]);
         if(imgPath.length>0){
         const res = await fetch(`${INVENTORY_API}/addItem`,{
             method: "POST",
@@ -84,7 +89,7 @@ const error = () => {
             setIsModalOpen(false);
             fetchItems();
             success();
-            setSelectedFile(null);
+            setImageList([]);
         } else {
             error();
         }
@@ -147,6 +152,13 @@ const error = () => {
  }, []);
  
 
+const handlePreview = (file) => {
+  const objectUrl = URL.createObjectURL(file);
+  setPreviewImage(objectUrl);
+  setPreviewOpen(true);
+  setPreviewTitle(file.name);
+};
+
   return (
     <div>
         {contextHolder}
@@ -163,7 +175,18 @@ const error = () => {
                 {isLoading  && <Spin size="large"/>}
                 <Input className='modalStyles' placeholder="Name" value={addName} onChange={(e) => setAddName(e.target.value)}/>
                 <Input className='modalStyles' min='0' placeholder="Quantity"  type="number" value={addQuantity} onChange={(e) => setAddQuantity(parseInt(e.target.value))}/>
-                <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setSelectedFile(e.target.files[0])}/>
+                <Upload accept='image/*' multiple={false} maxCount={1} fileList={imageList} onRemove={()=>setImageList([])}
+                onPreview={handlePreview}
+                customRequest={({file,onSuccess})=>{
+                    setImageList([file])
+                    onSuccess("ok");
+                }}
+                >
+                    <Button icon={<UploadOutlined />}>Add Image</Button>
+                </Upload>
+                <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={()=>setPreviewOpen(false)}>
+                    <img alt="example" style={{width: '100%'}} src={previewImage}/>
+                </Modal>
             </Modal>}
             {isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleUpdate} onCancel={handleCancel} okText={okText}>
                 {warning && <Alert message={warning} type="warning" showIcon />}
