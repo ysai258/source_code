@@ -1,13 +1,27 @@
-import express from "express";
-import mongoose from "mongoose";
-import Cors from "cors";
-import dotenv from "dotenv";
-import dotenvExpand from "dotenv-expand";
-import { InventoryModel } from "./Models/Inventory.js";
-import { StatusCodes } from "http-status-codes";
-import fileUpload from "express-fileupload";
-import AWS from "aws-sdk";
-import { v4 as uuid } from "uuid";
+// import express from "express";
+// import mongoose from "mongoose";
+// import Cors from "cors";
+// import dotenv from "dotenv";
+// import dotenvExpand from "dotenv-expand";
+// import { InventoryModel } from "./Models/Inventory.js";
+// import { StatusCodes } from "http-status-codes";
+// import fileUpload from "express-fileupload";
+// import AWS from "aws-sdk";
+// import { v4 as uuid } from "uuid";
+
+const express = require('express')
+const mongoose = require('mongoose')
+const Cors = require('cors')
+
+const dotenv = require('dotenv')
+const dotenvExpand = require('dotenv-expand')
+const InventoryModel = require('./Models/Inventory.js')
+
+const StatusCodes = require('http-status-codes').StatusCodes
+const fileUpload = require('express-fileupload')
+
+const AWS = require('aws-sdk')
+const uuid = require('uuid').v4
 
 const myEnv = dotenv.config();
 dotenvExpand.expand(myEnv);
@@ -154,7 +168,7 @@ app.post("/itemUpload", (req, res) => {
     // Send an error response if there is a problem retrieving the data
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message });
+      .json({ message: error.message });
   }
 });
 

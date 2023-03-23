@@ -1,1 +1,1 @@
-export const INVENTORY_COLLECTION = "inventories";
+module.exports= INVENTORY_COLLECTION = "inventories";

@@ -1,5 +1,9 @@
-import mongoose from "mongoose";
-import {INVENTORY_COLLECTION} from "../Constants/constants.js";
+const mongoose = require('mongoose')
+
+const INVENTORY_COLLECTION = require('../Constants/constants.js')
+
+// import mongoose from "mongoose";
+// import {INVENTORY_COLLECTION} from "../Constants/constants.js";
 
 // Define schema for Inventory to be stored in the database
 const Inventory = mongoose.Schema({
@@ -18,7 +22,7 @@ const Inventory = mongoose.Schema({
 });
 
 // Define model for the Inventory schema
-export const InventoryModel = mongoose.model(
+module.exports =InventoryModel = mongoose.model(
   INVENTORY_COLLECTION,
   Inventory
 );
