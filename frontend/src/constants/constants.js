@@ -1,1 +1,1 @@
-export const INVENTORY_API = 'http://44.195.40.49:8001';
+export const INVENTORY_API = 'http://54.237.65.143:8001';
