@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import '../assets/css/custom.css'
-import { Button, Modal, Input, Alert, Spin } from 'antd';
+import { Button, Modal, Input, Alert, Spin, message } from 'antd';
 import { INVENTORY_API } from '../constants/constants';
 
 const Inventory = () => {
@@ -17,8 +17,24 @@ const Inventory = () => {
  const [editQuantity, setEditQuantity] = useState('');
  const [rows, setRows] = useState([]);
  const [warning, setWarning] = useState('');
- const [totalDataCount,setTotalDataCount] = useState(10);
+ const [totalDataCount,setTotalDataCount] = useState('');
  const [isLoading, setIsLoading] = useState(false);
+ const [messageApi, contextHolder] = message.useMessage();
+
+const success = () => {
+    messageApi.open({
+        type: 'success',
+        content: 'Success',
+    });
+}
+
+const error = () => {
+    messageApi.open({
+        type: 'error',
+        content: 'Something went wrong!!!',
+    });
+}
+
  const showModal = () => {
     setTitle('Add Item');
     setOkText('Add');
@@ -48,6 +64,9 @@ const Inventory = () => {
             setWarning('');
             setIsModalOpen(false);
             fetchItems();
+            success();
+        } else {
+            error();
         }
     } else {
         setWarning('All Fields Are Mandatory');
@@ -65,6 +84,9 @@ const Inventory = () => {
             setWarning('');
             setIsModalOpen(false);
             fetchItems();
+            success();
+        } else {
+            error();
         }
 
     } else {
@@ -104,7 +126,7 @@ const Inventory = () => {
 
   return (
     <div>
-
+        {contextHolder}
         <div style={{width: 'auto', height: '20px'}}></div>
 
         <div className='stickyHeader'>
@@ -128,11 +150,12 @@ const Inventory = () => {
         </div>
 
         <div style={{width: 'auto', height: '20px'}}></div>
-
+        {!isLoading && rows.length>0 && <span className='totalCount'>Total Items In Inventory : {totalDataCount}</span> }
+        <div style={{width: 'auto', height: '20px'}}></div>
         <div className='flexBox'>
             {isLoading  && <Spin size="large"/>}
             {(!isLoading && rows.length === 0) && <Alert style={{width:'50%', margin:'auto'}} message='Inventory is empty, Please add items' type="info" showIcon />}
-            {(!isLoading && rows.length>0) && rows.map(row => 
+            {rows.length>0 && rows.map(row => 
             <div key={row._id}>
                 <div className='itemBox'>
                     <img src={row.img_s3path} alt={row.name} style={{ width: "200px", height: '200px' }}></img>
