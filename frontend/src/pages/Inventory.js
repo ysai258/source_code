@@ -9,9 +9,9 @@ const Inventory = () => {
  const [title, setTitle] = useState('');
  const [okText, setOkText] = useState('');
  const [isEditFunction, setIsEditFunction] = useState();
+ const [selectedFile, setSelectedFile] = useState(null);
  const [addName, setAddName] = useState('');
  const [addQuantity, setAddQuantity] = useState('');
- const [addImgUrl, setAddImgUrl] = useState('dummyUrl');
  const [editId, setEditId] = useState(''); 
  const [editName, setEditName] = useState('');
  const [editQuantity, setEditQuantity] = useState('');
@@ -50,24 +50,46 @@ const error = () => {
  }
 
 
+ const uploadImage = async (file)=>{
+    try {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch(`${INVENTORY_API}/itemUpload`, {
+            method: 'POST',
+            body: formData,
+          });
+        const data=await res.json();
+        if(res.ok){
+            return data.s3Path;
+        }      
+    } catch (err) {
+        error();
+    }
+    return '';
+}
  const handleAdd = async () => {
-    if (addName.trim().length && Number.isInteger(addQuantity)) {
+    if (addName.trim().length && Number.isInteger(addQuantity) && selectedFile!=null) {
+        setIsLoading(true);
+        const imgPath = await uploadImage(selectedFile);
+        if(imgPath.length>0){
         const res = await fetch(`${INVENTORY_API}/addItem`,{
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "name":addName,"quantity":addQuantity,"img_s3path":addImgUrl}),
+            body: JSON.stringify({ "name":addName,"quantity":addQuantity,"img_s3path":imgPath}),
           });
         if(res.ok){
             setAddName('');
             setAddQuantity('');
-            setAddImgUrl('');
             setWarning('');
             setIsModalOpen(false);
             fetchItems();
             success();
+            setSelectedFile(null);
         } else {
             error();
         }
+        }
+        setIsLoading(false);
     } else {
         setWarning('All Fields Are Mandatory');
     }
@@ -75,6 +97,7 @@ const error = () => {
 
  const handleUpdate = async() => {
     if (editName.trim().length  && Number.isInteger(editQuantity)) {
+        setIsLoading(true);
         const res = await fetch(`${INVENTORY_API}/updateItem`,{
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -88,7 +111,7 @@ const error = () => {
         } else {
             error();
         }
-
+        setIsLoading(false);
     } else {
         setWarning('Name & Quantity are mandatory fields');
     }
@@ -137,12 +160,14 @@ const error = () => {
             </Button>
             {!isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleAdd} onCancel={handleCancel} okText={okText}>
                 {warning && <Alert message={warning} type="warning" showIcon />}
+                {isLoading  && <Spin size="large"/>}
                 <Input className='modalStyles' placeholder="Name" value={addName} onChange={(e) => setAddName(e.target.value)}/>
                 <Input className='modalStyles' min='0' placeholder="Quantity"  type="number" value={addQuantity} onChange={(e) => setAddQuantity(parseInt(e.target.value))}/>
-                <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg"/>
+                <Input className='modalStyles' placeholder="Image"  type="file" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setSelectedFile(e.target.files[0])}/>
             </Modal>}
             {isEditFunction && <Modal title={title} open={isModalOpen} onOk={handleUpdate} onCancel={handleCancel} okText={okText}>
                 {warning && <Alert message={warning} type="warning" showIcon />}
+                {isLoading  && <Spin size="large"/>}
                 <Input className='modalStyles' placeholder="Name"  onChange={(e) => setEditName(e.target.value)} value={editName}/>
                 <Input className='modalStyles' min='0' placeholder="Quantity" type="number" onChange={(e) => setEditQuantity(parseInt(e.target.value))} value={editQuantity}/>
             </Modal>}

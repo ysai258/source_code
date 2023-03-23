@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
 import { InventoryModel } from "./Models/Inventory.js";
 import { StatusCodes } from "http-status-codes";
+import fileUpload from "express-fileupload";
+import AWS from "aws-sdk";
+import { v4 as uuid } from "uuid";
 
 const myEnv = dotenv.config();
 dotenvExpand.expand(myEnv);
@@ -14,6 +17,7 @@ const app = express();
 const port = process.env.port || 8001;
 
 // midde ware
+app.use(fileUpload());
 app.use(express.json());
 app.use(Cors());
 
@@ -33,6 +37,18 @@ try {
   console.log("Database connection failed");
 }
 
+// Connecting aws
+try {
+  AWS.config.update({
+    accessKeyId: process.env.aws_access_key,
+    secretAccessKey: process.env.aws_secret_key,
+    region: process.env.aws_region,
+  });
+  console.log("AWS connected succesfully");
+} catch (error) {
+  console.log(error);
+  console.log("AWS connection failed");
+}
 //API Endpoint
 
 app.get("/", (req, res) => res.status(200).send(" Programmers!!!"));
@@ -99,6 +115,42 @@ app.get("/getItems", async (req, res) => {
     };
     res.status(StatusCodes.OK).json(response);
   } catch (err) {
+    // Send an error response if there is a problem retrieving the data
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
+  }
+});
+
+const s3 = new AWS.S3();
+
+// Endpoint for image upload
+app.post("/itemUpload", (req, res) => {
+  try {
+    const file = req.files.image;
+
+    // Generate a unique name for the file using UUID
+    const fileName = `${uuid()}.${file.name.split(".").pop()}`;
+
+    // Set up S3 upload parameters
+    const params = {
+      Bucket: process.env.aws_inventory_bucket,
+      Key: fileName,
+      Body: file.data,
+    };
+
+    // Upload file to S3
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ message: err.message });
+      }
+      // Return S3 path as response
+      res.status(StatusCodes.OK).json({ s3Path: data.Location });
+    });
+  } catch (error) {
     // Send an error response if there is a problem retrieving the data
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
