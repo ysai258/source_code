@@ -10,6 +10,7 @@ import MuiAlert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import '../assets/css/custom.css';
+import { INVENTORY_API } from '../constants/constants';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -65,7 +66,7 @@ const PalletPage = () => {
         //fetch('http://3.15.154.27:8125/add_code', requestOptions)
         //fetch('http://3.18.104.218:8125/add_code', requestOptions)
         // fetch('https://adc.eyeota.ai/api/add_to_pallet', requestOptions)
-            fetch('http://localhost:8001/api/calulate', requestOptions)
+            fetch(`${INVENTORY_API}/api/calulate`, requestOptions)
             .then(checkStatus)
             .then(response => {
                 return response.json()
