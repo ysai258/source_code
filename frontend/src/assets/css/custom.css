@@ -92,3 +92,8 @@
     padding: 5px 10px;
     margin-bottom: 15px;
 }
+
+.formStyles {
+    width: 30%;
+    margin: auto;
+}

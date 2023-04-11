@@ -97,7 +97,7 @@ function ResponsiveAppBar(props) {
                   aria-controls={open ? 'composition-menu' : undefined}
                   aria-expanded={open ? 'true' : undefined}
                   aria-haspopup="true"
-                  style={{ color: 'white', marginTop : '-40px', fontSize : ' 20px'  }}
+                  style={{ color: 'white', fontSize : ' 20px'  }}
                   
                 >
                   NedtID

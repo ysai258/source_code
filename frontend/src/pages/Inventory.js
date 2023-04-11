@@ -223,12 +223,14 @@ const handlePreview = (file) => {
                     <div className='innerFlex'>
                         <p className='nameText'>{row.name}</p>
                         <p className='quantityText'>{row.quantity}</p>
-                        <Button type="primary" onClick={() => showEditModal(row)}>
-                            Edit Item
-                        </Button>
-                        <Button type="dashed" onClick={() => deleteItem(row)} style={{margin:30}}>
-                            Delete
-                        </Button>
+                        <>
+                            <Button type="primary" onClick={() => showEditModal(row)}>
+                                Edit Item
+                            </Button>
+                            <Button danger onClick={() => deleteItem(row)} style={{marginLeft:30}}>
+                                Delete
+                            </Button>
+                        </>
                     </div>
                 </div>
                 <div style={{width: 'auto', height: '20px'}}></div>

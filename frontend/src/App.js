@@ -16,6 +16,7 @@ import Inventory from "./pages/Inventory";
 import Login from "./pages/Login";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Auth from "./pages/Auth";
 
 export default function App() {
   return (
@@ -40,7 +41,7 @@ export default function App() {
               } />
               <Route path="/login" element={
               <div className="App">
-                  <Login/>
+                  <Auth/>
               </div>
               } />
       </Route>
