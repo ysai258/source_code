@@ -97,8 +97,9 @@ router.post(
 
       res.cookie(JWT_TOKEN_NAME, token, {
         httpOnly: true,
-        maxAge: JWT_EXPIRY_SECONDS *  1000 
-      }); 
+        maxAge: JWT_EXPIRY_SECONDS * 1000,
+        sameSite: "strict",
+      });
       res.status(StatusCodes.OK).json({ message: "Login successful" });
     } catch (err) {
       res

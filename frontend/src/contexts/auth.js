@@ -6,27 +6,28 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const res = await fetch(`${INVENTORY_API}/getCurrentUser`, {
-          method: 'GET',
-          credentials: 'include',
-        });
-        const user = await res.json();
-        if(user?.username){
-            setCurrentUser(user);
-        }
-      } catch (err) {
-        console.error('Failed to fetch current user:', err);
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await fetch(`${INVENTORY_API}/getCurrentUser`, {
+        method: 'GET',        
+        credentials: 'include',
+      });
+      const user = await res.json();
+      console.log("yash 17",user);
+      if(user?.username){
+          setCurrentUser(user);
       }
-    };
+    } catch (err) {
+      console.error('Failed to fetch current user:', err);
+    }
+  };
 
+  useEffect(() => {
     fetchCurrentUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser , fetchCurrentUser}}>
       {children}
     </AuthContext.Provider>
   );
