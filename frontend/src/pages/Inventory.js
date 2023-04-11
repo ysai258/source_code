@@ -131,7 +131,20 @@ const error = () => {
     setIsEditFunction(true);
     setIsModalOpen(true);
  }
-
+const deleteItem = async (data) => {
+  setIsLoading(true);
+  const res = await fetch(`${INVENTORY_API}/deleteItem`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ _id: data._id }),
+  });
+  if (res.ok) {
+    fetchItems();
+  } else {
+    error();
+  }
+  setIsLoading(false);
+};
  const fetchItems = async () => {
     try {
     setIsLoading(true);
@@ -213,9 +226,11 @@ const handlePreview = (file) => {
                         <Button type="primary" onClick={() => showEditModal(row)}>
                             Edit Item
                         </Button>
+                        <Button type="dashed" onClick={() => deleteItem(row)} style={{margin:30}}>
+                            Delete
+                        </Button>
                     </div>
                 </div>
-
                 <div style={{width: 'auto', height: '20px'}}></div>
             </div>)}
         </div>

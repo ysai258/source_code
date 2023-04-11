@@ -13,6 +13,9 @@ import AppBar from './pages/AppBar';
 import PalletPage from "./pages/PalletPage";
 import ThirdParty from "./pages/ThirdParty";
 import Inventory from "./pages/Inventory";
+import Login from "./pages/Login";
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 export default function App() {
   return (
@@ -33,6 +36,11 @@ export default function App() {
             <Route path="/inventory" element={
               <div className="App">
                   <Inventory/>
+              </div>
+              } />
+              <Route path="/login" element={
+              <div className="App">
+                  <Login/>
               </div>
               } />
       </Route>

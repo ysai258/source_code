@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const INVENTORY_COLLECTION = require('../Constants/constants.js')
+const {INVENTORY_COLLECTION} = require('../Constants/constants.js')
 
 // import mongoose from "mongoose";
 // import {INVENTORY_COLLECTION} from "../Constants/constants.js";

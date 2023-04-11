@@ -24,6 +24,7 @@ import Popper from '@mui/material/Popper';
 import { height } from '@mui/system';
 
 import '../assets/css/custom.css';
+import { useAuth } from '../contexts/auth';
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -33,6 +34,8 @@ function ResponsiveAppBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
+  const {currentUser} = useAuth();
+  console.log("yash 38",currentUser)
 
   useEffect(() => {
     return () => {
@@ -81,7 +84,7 @@ function ResponsiveAppBar(props) {
    
                 <Link to="/third-party" className='linkTag'>Third Party API</Link>
                 <Link to="/inventory" className='linkTag'>Inventory</Link>
-             
+                {!currentUser &&  <Link to="/login" className='linkTag'>Login</Link> }              
 
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>
