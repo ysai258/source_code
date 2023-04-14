@@ -96,7 +96,6 @@ router.post(
       );
 
       res.cookie(JWT_TOKEN_NAME, token, {
-        httpOnly: true,
         maxAge: JWT_EXPIRY_SECONDS * 1000,
         sameSite: "strict",
       });
@@ -110,7 +109,10 @@ router.post(
 );
 
 router.post("/logout", (req, res) => {
-  res.clearCookie(JWT_TOKEN_NAME);
+  res.clearCookie(JWT_TOKEN_NAME, {
+    maxAge: JWT_EXPIRY_SECONDS * 1000,
+    sameSite: "strict",
+  });
   res.status(StatusCodes.OK).json({ message: "Logout successful" });
 });
 

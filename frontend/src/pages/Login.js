@@ -35,19 +35,10 @@ const Login = (props) => {
         props.isLoading(false);
     }
   }
-  const logOut = async ()=>{
-    const res = await fetch(`${INVENTORY_API}/logout`,{
-      method: "POST",
-    });
-    const data= await res.json();
-    console.log("yash 41",data);
-  }
 
   return (
     <div>
          <button className="btn btn-info mb-2" onClick={ handleLogin }>Log In</button>
-         <button className="btn btn-info mb-2" onClick={ logOut }>Log out</button>
-         
     </div>
   )
 }

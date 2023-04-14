@@ -1,10 +1,12 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/custom.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Login from './Login';
 import Signup from './Signup';
 import { Alert, message, Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { INVENTORY_API } from '../constants/constants';
 
 const Auth = () => {
 
@@ -14,9 +16,19 @@ const Auth = () => {
  const [errorMessage, setErrorMessage] = useState('');
  const [messageApi, contextHolder] = message.useMessage();
  const [isLoading, setIsLoading] = useState(false);
+ const [backgroundCol, setBackgroundCol] = useState('#8aed94')
+ const navigate = useNavigate();
+ 
  
 const handleLogin = (event) => {
+    setUserName('');
+    setPassword('');
     setIsLogin(event);
+    if (event === true) {
+      setBackgroundCol('#8aed94');
+    } else {
+      setBackgroundCol('#898c7b')
+    }
     setErrorMessage('');
 }
 
@@ -36,6 +48,29 @@ const success = () => {
         content: 'Success',
     });
 }
+const fetchCurrentUser = async () => {
+    try {
+      const res = await fetch(`${INVENTORY_API}/getCurrentUser`, {
+        method: 'GET',        
+        credentials: 'include',
+      });
+      const user = await res.json();
+
+    console.log(user.user);
+      if(user?.user.username){
+          navigate('/')
+      }
+    } catch (err) {
+      console.error('Failed to fetch current user:', err);
+    }
+};
+
+useEffect(() => {
+  return () => {
+    fetchCurrentUser(); 
+  }
+}, [])
+
 
   return (
     <div className='formStyles'>
@@ -49,13 +84,14 @@ const success = () => {
 
         {isLoading  && <Spin size="large"/>}
         <div style={{width: 'auto', height: '60px'}}></div>
-
-        <button type="button" onClick={ () => handleLogin(true) } className="btn btn-info mr-2 mb-2">Log In</button>
-        <button type="button" onClick={ () => handleLogin(false) } className="btn btn-success ml-2 mb-2">Sign Up</button>
-        <input type="email" className="form-control mb-2 mr-sm-2" placeholder="Enter email" id="email" onChange={(e) => setUserName(e.target.value)}/>
-        <input type="password" className="form-control mb-2 mr-sm-2" placeholder="Enter password" id="pwd" onChange={(e) => setPassword(e.target.value)}/>
-        { isLogIn && <Login username = {userName} password = {password} successMessage = { success } errorMessage = { handleSetErrorMessage } isLoading = { handleLoading } /> }
-        { !isLogIn && <Signup username = {userName} password = {password}  successMessage = { success } errorMessage = { handleSetErrorMessage } isLoading = { handleLoading } /> }
+        <div style={{backgroundColor : backgroundCol, padding:'15px', borderRadius: '5px'}}>
+            <button type="button" onClick={ () => handleLogin(true) } className="btn btn-info mr-2 mb-2">Log In</button>
+            <button type="button" onClick={ () => handleLogin(false) } className="btn btn-success ml-2 mb-2">Sign Up</button>
+            <input type="email" className="form-control mb-2 mr-sm-2" placeholder="Enter Username" id="text" onChange={(e) => setUserName(e.target.value)} value={userName}/>
+            <input type="password" className="form-control mb-2 mr-sm-2" placeholder="Enter password" id="pwd" onChange={(e) => setPassword(e.target.value)} value={password}/>
+            { isLogIn && <Login username = {userName} password = {password} successMessage = { success } errorMessage = { handleSetErrorMessage } isLoading = { handleLoading } /> }
+            { !isLogIn && <Signup setLogin = {handleLogin} username = {userName} password = {password}  successMessage = { success } errorMessage = { handleSetErrorMessage } isLoading = { handleLoading } /> }
+        </div>
     </div>
   )
 }

@@ -22,26 +22,33 @@ import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import { height } from '@mui/system';
+import Cookies from 'js-cookie';
+import { Profile } from './Profile';
+
 
 import '../assets/css/custom.css';
-import { useAuth } from '../contexts/auth';
+import { INVENTORY_API, JWT_TOKEN_NAME } from '../constants/constants';
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Logout'];
 
+
 function ResponsiveAppBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
-  const {currentUser} = useAuth();
-  console.log("yash 38",currentUser)
+  const authToken = Cookies.get(JWT_TOKEN_NAME);
 
   useEffect(() => {
     return () => {
+      setCurrentUser(Cookies.get(JWT_TOKEN_NAME));
+    }
+  }, [authToken])
 
-    };
-  }, []);
+
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -68,6 +75,14 @@ function ResponsiveAppBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const logOut = async ()=>{
+    const res = await fetch(`${INVENTORY_API}/logout`,{
+      method: "POST",
+      credentials:"include",
+    });
+    const data= await res.json();
+    navigate('/login')
+  }
 
   // <Avatar sx={{ width: 56, height: 56 }} alt="Scanner App" src={logo} />
   return (
@@ -84,7 +99,9 @@ function ResponsiveAppBar(props) {
    
                 <Link to="/third-party" className='linkTag'>Third Party API</Link>
                 <Link to="/inventory" className='linkTag'>Inventory</Link>
-                {!currentUser &&  <Link to="/login" className='linkTag'>Login</Link> }              
+                { currentUser && <Link to="/profile" className='linkTag'>Profile</Link> }
+                { currentUser && <Link to="/" onClick={ logOut } className='linkTag'>Logout</Link> }
+                { !currentUser && <Link to="/login" className='linkTag'>Login</Link> }   
 
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>

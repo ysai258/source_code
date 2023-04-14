@@ -23,7 +23,7 @@ const Signup = (props) => {
               if(res.ok){
                 props.errorMessage('');
                 props.successMessage();
-                navigate('/');
+                props.setLogin(true);
             } else {
               props.errorMessage('Something Went Wrong');
             }
