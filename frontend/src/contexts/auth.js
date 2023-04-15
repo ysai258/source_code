@@ -13,7 +13,6 @@ const AuthProvider = ({ children }) => {
         credentials: 'include',
       });
       const user = await res.json();
-      console.log("yash 17",user);
       if(user?.username){
           setCurrentUser(user);
       }

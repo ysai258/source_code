@@ -66,9 +66,7 @@ const fetchCurrentUser = async () => {
 };
 
 useEffect(() => {
-  return () => {
     fetchCurrentUser(); 
-  }
 }, [])
 
 

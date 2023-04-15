@@ -42,9 +42,7 @@ function ResponsiveAppBar(props) {
   const authToken = Cookies.get(JWT_TOKEN_NAME);
 
   useEffect(() => {
-    return () => {
       setCurrentUser(Cookies.get(JWT_TOKEN_NAME));
-    }
   }, [authToken])
 
 

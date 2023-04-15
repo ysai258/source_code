@@ -12,7 +12,6 @@ export const Profile = () => {
           });
           const user = await res.json();
     
-        console.log(user.user);
           if(user?.user.username){
             setUserName(user.user.username);
           }
@@ -24,9 +23,7 @@ export const Profile = () => {
     
     const navigate = useNavigate();
     useEffect(() => {
-      return () => {
         fetchCurrentUser(); 
-      }
     }, [])
   return (
     <>
