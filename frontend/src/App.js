@@ -2,24 +2,19 @@ import * as React from "react";
 import {
   Routes,
   Route,
-  Link,
-  useNavigate,
-  useLocation,
   Navigate,
-  Outlet,
 } from "react-router-dom";
 import './App.css';
 import AppBar from './pages/AppBar';
 import PalletPage from "./pages/PalletPage";
 import ThirdParty from "./pages/ThirdParty";
 import Inventory from "./pages/Inventory";
-import Login from "./pages/Login";
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import Auth from "./pages/Auth";
 import { Profile } from "./pages/Profile";
+import { useAuth } from "./contexts/auth";
 
-export default function App() {
+export default function App() {  
+  const {currentUser} =useAuth();
   return (
   <>
     <AppBar />
@@ -40,16 +35,19 @@ export default function App() {
                   <Inventory/>
               </div>
               } />
+            {! currentUser &&
             <Route path="/login" element={
             <div className="App">
                 <Auth/>
             </div>
             } />
+          }
             <Route path="/profile" element={
             <div className="App">
                 <Profile/>
             </div>
             } />
+            <Route path="*" element={<Navigate to="/" />} />
       </Route>
     </Routes>
   </>

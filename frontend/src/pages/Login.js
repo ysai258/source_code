@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/custom.css'
-import { INVENTORY_API } from '../constants/constants';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/auth';
 
 
 const Login = (props) => {
-  const {fetchCurrentUser} = useAuth();
+  const {login} = useAuth();
   const navigate = useNavigate();
   const handleLogin = async(event) => {
     event.preventDefault();
@@ -17,21 +16,15 @@ const Login = (props) => {
       props.errorMessage('Username and Password is required');
     } else {
         props.isLoading(true);
-        const res = await fetch(`${INVENTORY_API}/login`,{
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "username":username,"password":password}),
-            credentials:"include",
-          });
-          if(res.ok){
+        const onSuccess = ()=>{
             props.errorMessage('');
             props.successMessage();
             navigate('/');
-            fetchCurrentUser();
-        } else {
-          console.log(res.message);
+        }
+        const onFailure = ()=>{
           props.errorMessage('Something Went Wrong');
         }
+        await login(username,password,onSuccess,onFailure);
         props.isLoading(false);
     }
   }

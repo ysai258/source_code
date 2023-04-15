@@ -12,7 +12,8 @@ const AuthProvider = ({ children }) => {
         method: 'GET',        
         credentials: 'include',
       });
-      const user = await res.json();
+      const data = await res.json();
+      const user = data?.user;
       if(user?.username){
           setCurrentUser(user);
       }
@@ -25,8 +26,46 @@ const AuthProvider = ({ children }) => {
     fetchCurrentUser();
   }, []);
 
+  const login = async(username,password,onSuccess = ()=>{},onFailure=()=>{})=>{
+    try {
+          const res = await fetch(`${INVENTORY_API}/login`,{
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "username":username,"password":password}),
+            credentials:"include",
+          });
+          if(res.ok){
+            onSuccess();
+            fetchCurrentUser();
+        } else {
+          onFailure();
+        }
+    } catch (error) {
+      onFailure();
+      console.log("error on login",error);
+    }
+  }
+
+  const logout = async (onSuccess = ()=>{},onFailure=()=>{})=>{
+    try {
+      const res = await fetch(`${INVENTORY_API}/logout`,{
+        method: "POST",
+        credentials:"include",
+      });
+      const data= await res.json();
+      if(data){
+        setCurrentUser(null);
+        onSuccess();
+      }        
+    } catch (error) {
+      onFailure();
+      console.log("error on logout",error);
+    }
+  }
+
+
   return (
-    <AuthContext.Provider value={{ currentUser , fetchCurrentUser}}>
+    <AuthContext.Provider value={{ currentUser ,logout,login}}>
       {children}
     </AuthContext.Provider>
   );

@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/custom.css'
 import { INVENTORY_API } from '../constants/constants';
-import { useNavigate } from 'react-router-dom';
 
 const Signup = (props) => {
-    const navigate = useNavigate();
 
     const handleSignUp = async(event) => {
         event.preventDefault();

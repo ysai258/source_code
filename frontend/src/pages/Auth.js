@@ -1,15 +1,13 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/custom.css'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Login from './Login';
 import Signup from './Signup';
 import { Alert, message, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { INVENTORY_API } from '../constants/constants';
 
 const Auth = () => {
-
  const [isLogIn , setIsLogin] = useState(true);
  const [userName, setUserName] = useState('');
  const [password, setPassword] = useState('');
@@ -17,7 +15,6 @@ const Auth = () => {
  const [messageApi, contextHolder] = message.useMessage();
  const [isLoading, setIsLoading] = useState(false);
  const [backgroundCol, setBackgroundCol] = useState('#8aed94')
- const navigate = useNavigate();
  
  
 const handleLogin = (event) => {
@@ -48,27 +45,6 @@ const success = () => {
         content: 'Success',
     });
 }
-const fetchCurrentUser = async () => {
-    try {
-      const res = await fetch(`${INVENTORY_API}/getCurrentUser`, {
-        method: 'GET',        
-        credentials: 'include',
-      });
-      const user = await res.json();
-
-    console.log(user.user);
-      if(user?.user.username){
-          navigate('/')
-      }
-    } catch (err) {
-      console.error('Failed to fetch current user:', err);
-    }
-};
-
-useEffect(() => {
-    fetchCurrentUser(); 
-}, [])
-
 
   return (
     <div className='formStyles'>
