@@ -1,6 +1,7 @@
-54.89.140.175 {
+0.0.0.0 {
   reverse_proxy frontend:3000
 }
-54.89.140.175/api/* {
+
+0.0.0.0/api/* {
   reverse_proxy backend:8001
 }

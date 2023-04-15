@@ -10,4 +10,5 @@ RUN npm install serve -g
 COPY frontend .
 
 EXPOSE 3000
-CMD ["serve", "build 3000 --spa"]
+
+CMD ["serve", "-s", "build", "-l", "3000"]
