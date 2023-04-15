@@ -66,7 +66,7 @@ const PalletPage = () => {
         //fetch('http://3.15.154.27:8125/add_code', requestOptions)
         //fetch('http://3.18.104.218:8125/add_code', requestOptions)
         // fetch('https://adc.eyeota.ai/api/add_to_pallet', requestOptions)
-            fetch(`${INVENTORY_API}/api/calulate`, requestOptions)
+            fetch(`${INVENTORY_API}/calulate`, requestOptions)
             .then(checkStatus)
             .then(response => {
                 return response.json()

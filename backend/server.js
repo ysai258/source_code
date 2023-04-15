@@ -19,6 +19,7 @@ dotenvExpand.expand(myEnv);
 
 const app = express();
 const port = process.env.port || 8001;
+const host = "0.0.0.0";
 
 // midde ware
 app.use(morgan("dev"));
@@ -33,15 +34,15 @@ initAWS();
 
 //API Endpoint
 
-app.get("/", (req, res) => res.status(200).send(" Programmers!!!"));
+app.get("/api", (req, res) => res.status(200).send(" Programmers!!!"));
 
 app.post("/api/calulate", (req, res) => {
   let s = parseInt(req.body.fn) + parseInt(req.body.sn);
   res.status(200).send(s.toString());
 });
 
-app.use("/",userRouter);
-app.use("/", itemRouter);
+app.use("/api",userRouter);
+app.use("/api", itemRouter);
 
 //Listener
-app.listen(port, () => console.log(`listening on localhost: ${port}`));
+app.listen(port,host, () => console.log(`listening on ${host}: ${port}`));
