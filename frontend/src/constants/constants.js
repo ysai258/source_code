@@ -1,1 +1,1 @@
-export const INVENTORY_API = 'http://localhost:8001/api';
+export const INVENTORY_API = 'http://3.87.194.58/api';
