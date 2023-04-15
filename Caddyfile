@@ -1,6 +1,6 @@
-localhost {
+54.89.140.175 {
   reverse_proxy frontend:3000
 }
-localhost/api/* {
+54.89.140.175/api/* {
   reverse_proxy backend:8001
 }
