@@ -42,12 +42,13 @@ export default function App() {
             </div>
             } />
           }
-            <Route path="/profile" element={
+          {currentUser &&  <Route path="/profile" element={
             <div className="App">
                 <Profile/>
             </div>
             } />
-            <Route path="*" element={<Navigate to="/" />} />
+          }
+          <Route path="*" element={<Navigate to="/" />} />
       </Route>
     </Routes>
   </>
