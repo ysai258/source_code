@@ -1,7 +1,17 @@
 import { useAuth } from '../contexts/auth';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const Profile = () => {
+    const navigate = useNavigate();
     const {currentUser} = useAuth();
+
+    useEffect(() => {
+      if (!currentUser) {
+        navigate('/login')
+      }
+    }, [])
+    
   return (
     <>
          <div style={{width: 'auto', height: '60px'}}></div>
